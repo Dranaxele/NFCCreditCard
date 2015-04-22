@@ -20,6 +20,7 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.ingesup.nfccreditcard.Parser.FCI;
+import com.ingesup.nfccreditcard.metier.EmvCard;
 
 public class NFCCreditCardToolActivity extends Activity {
 	private static final int DIALOG_NFC_OFF = 1;
@@ -27,6 +28,7 @@ public class NFCCreditCardToolActivity extends Activity {
 	private PendingIntent pendingIntent;
 	private String[][] mTechLists;
 	private IntentFilter[] mFilters;
+    public static EmvCard CreditCard;
 	
 	TextView tv1;
 	
@@ -37,6 +39,7 @@ public class NFCCreditCardToolActivity extends Activity {
         setContentView(R.layout.activity_main);
         tv1 = (TextView) findViewById(R.id.tv1);
         tv1.setText("Waiting for card...");
+        CreditCard = new EmvCard();
 
         mAdapter = NfcAdapter.getDefaultAdapter(this);
   	    pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
@@ -81,6 +84,7 @@ public class NFCCreditCardToolActivity extends Activity {
         Parcelable nfcTag = intent.getParcelableExtra("android.nfc.extra.TAG");
         Tag t = (Tag) nfcTag;
         IsoDep myTag = IsoDep.get(t);
+
         if( !myTag.isConnected() ) {
 			try {
 				myTag.connect();
@@ -90,23 +94,28 @@ public class NFCCreditCardToolActivity extends Activity {
 			}
         }
         tv1.setText("Tag connected");
-        //byte selectCommand[] = {0x00,(byte) 0xa4,0x04,0x00,0x07,(byte) 0xa0,0x00,0x00,0x00,0x42,0x10,0x10,0x00};
+
         //byte selectCommand[] = {0x00, (byte) 0xA4,0x04,0x00,0x0E,0x32,0x50,0x41,0x59,0x2E,0x53,0x59,0x53,0x2E,0x44,0x44,0x46,0x30,0x31,0x00};
-        byte selectCommand[] = {(byte)0x80,(byte)0xCA,(byte)0x5F,0x34,0x00};
 
-        byte response[] = new byte[100];
 
-        try {
-            myTag.isConnected();
-            String mess = "";
-			response = myTag.transceive(selectCommand);
-            mess += ParseGeneralInfo.toHex(response);
-            //new FCI(response);
-			tv1.setText(mess);
-		} catch (IOException e) {
-            Log.d("Test", "Erreur: " + e);
-			e.printStackTrace();
-			return;
-		}
+                byte response[] = new byte[100];
+
+                try {
+                    String mess = "";
+                    byte FCICommand[] = {0x00,(byte) 0xa4,0x04,0x00,0x07,(byte) 0xa0,0x00,0x00,0x00,0x42,0x10,0x10,0x00};
+                    response = myTag.transceive(FCICommand);
+                    mess += ParseGeneralInfo.toHex(response);
+                    new FCI(response);
+                    Log.d("Test", "Reponse: " + mess);
+
+                    byte AFLCommand[] = {(byte) 0x80, (byte) 0xA8,(byte) 0x00, 0x00, (byte) CreditCard.getPDOL().length(),  CreditCard.getPDOL(), 0x00, 0x00};
+                    response = myTag.transceive(AFLCommand);
+                    mess += ParseGeneralInfo.toHex(response);
+                    Log.d("Test", "Reponse: " + mess);
+                } catch (IOException e) {
+                    Log.d("Test", "Erreur: " + e);
+                    e.printStackTrace();
+                    return;
+                }
     }
 }

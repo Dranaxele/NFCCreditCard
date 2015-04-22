@@ -2,6 +2,7 @@ package com.ingesup.nfccreditcard.Parser;
 
 import android.util.Log;
 
+import com.ingesup.nfccreditcard.NFCCreditCardToolActivity;
 import com.ingesup.nfccreditcard.ParseGeneralInfo;
 
 /**
@@ -39,6 +40,12 @@ public class FCI {
                 Log.d("Test", "Parse: Application Preferred Name");
                 Log.d("Test", "Taille: " + ParseGeneralInfo.byteValue(bytes[i+2]));
                 Log.d("Test", "Message: " + ParseGeneralInfo.bytesToString(bytes, i+3, ParseGeneralInfo.byteValue(bytes[i+2])));
+            }else if(bytes[i] == (byte) 0x9F && bytes[i+1] == (byte) 0x38){
+                Log.d("Test", "Parse: PDOL");
+                Log.d("Test", "Taille: " + ParseGeneralInfo.byteValue(bytes[i+2]));
+                Log.d("Test", "Message: ");
+                NFCCreditCardToolActivity.CreditCard.setPDOL(ParseGeneralInfo.toHex(bytes).substring((i*2)+4, (i*2)+4+ParseGeneralInfo.byteValue(bytes[i+2])));
+                Log.d("Carte", "PDOL: " + NFCCreditCardToolActivity.CreditCard.getPDOL());
             }else if(bytes[i] == (byte) 0x5F && bytes[i+1] == (byte) 0x2D){
                 Log.d("Test", "Parse: Language Preference");
                 Log.d("Test", "Taille: " + ParseGeneralInfo.byteValue(bytes[i+2]));
@@ -46,7 +53,7 @@ public class FCI {
             }else if(bytes[i] == (byte) 0xBF && bytes[i+1] == (byte) 0x0C){
                 Log.d("Test", "Parse: File Control Information (FCI) Proprietary Template");
                 Log.d("Test", "Taille: " + ParseGeneralInfo.byteValue(bytes[i+2]));
-                Log.d("Test", "Message: " + ParseGeneralInfo.bytesToString(bytes, i+3, ParseGeneralInfo.byteValue(bytes[i+2])));
+                Log.d("Test", "Message: ");
             }
         }
     }
