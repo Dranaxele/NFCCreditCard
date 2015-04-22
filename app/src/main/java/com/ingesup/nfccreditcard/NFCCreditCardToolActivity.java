@@ -107,26 +107,28 @@ public class NFCCreditCardToolActivity extends Activity {
                     response = myTag.transceive(FCICommand);
                     mess += ParseGeneralInfo.toHex(response);
                     new FCI(response);
-                    Log.d("Test", "Reponse: " + mess);
+                    Log.d("Test", "FCI Reponse: " + mess);
 
                     if(CreditCard.getPDOL() == null){
-
+                        byte AFLCommand[] = {(byte) 0x80, (byte) 0xA8,(byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x83,(byte) 0x00};
+                        response = myTag.transceive(AFLCommand);
+                        mess = ParseGeneralInfo.toHex(response);
+                        Log.d("Test", "AFL Response: " + mess);
                     }else {
-                        byte AFLCommand[] = new byte[(CreditCard.getPDOL().length()/2) + 5];
-                        //AFLCommand = {(byte) 0x80, (byte) 0xA8,(byte) 0x00, (byte) 0x00, (byte) (CreditCard.getPDOL().length()/2), (byte) 0x00, (byte) 0x00};
+                        byte AFLCommand[] = new byte[(CreditCard.getPDOL().length()/2) + 6];
                         AFLCommand[0] = (byte) 0x80;
                         AFLCommand[1] = (byte) 0xA8;
                         AFLCommand[2] = (byte) 0x00;
                         AFLCommand[3] = (byte) 0x00;
-                        AFLCommand[4] = (byte) (CreditCard.getPDOL().length()/2);
+                        AFLCommand[5] = (byte) (CreditCard.getPDOL().length()/2);
+                        AFLCommand[4] = (byte) 0x83;
                         for (int p = 0; p < CreditCard.getPDOL().length(); p += 2) {
-                            AFLCommand[(p/2)+5] = ParseGeneralInfo.hexStringToByteArray(CreditCard.getPDOL().substring(p, p + 2))[0];
+                            AFLCommand[(p/2)+6] = ParseGeneralInfo.hexStringToByteArray(CreditCard.getPDOL().substring(p, p + 2))[0];
                         }
-                        AFLCommand[(CreditCard.getPDOL().length()/2) + 4] = (byte) 0x00;
+                        AFLCommand[(CreditCard.getPDOL().length()/2) + 5] = (byte) 0x00;
                         response = myTag.transceive(AFLCommand);
                         mess = ParseGeneralInfo.toHex(response);
-                        Log.d("Test", "PDOL Question: " + AFLCommand);
-                        Log.d("Test", "PDOL Response: " + mess);
+                        Log.d("Test", "AFL Response: " + mess);
                     }
 
                 } catch (IOException e) {
