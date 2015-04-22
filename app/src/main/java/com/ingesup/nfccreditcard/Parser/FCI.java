@@ -12,7 +12,7 @@ public class FCI {
 
     public FCI(byte[] bytes) {
         for(int i=0;i<bytes.length;i++){
-            if(bytes[i] == 0x6F){
+            if(bytes[i] == (byte) 0x6F){
                 Log.d("Test", "Parse: FCI");
                 Log.d("Test", "Taille: " + ParseGeneralInfo.byteValue(bytes[i+1]));
                 Log.d("Test", "Message: " + ParseGeneralInfo.toHex(bytes).substring((i*2)+4, ((ParseGeneralInfo.byteValue(bytes[i+1]))*2)+(i*2)+4));

@@ -21,6 +21,7 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.ingesup.nfccreditcard.Parser.FCI;
+import com.ingesup.nfccreditcard.Parser.AFL;
 import com.ingesup.nfccreditcard.metier.EmvCard;
 
 public class NFCCreditCardToolActivity extends Activity {
@@ -110,9 +111,11 @@ public class NFCCreditCardToolActivity extends Activity {
                     Log.d("Test", "FCI Reponse: " + mess);
 
                     if(CreditCard.getPDOL() == null){
-                        byte AFLCommand[] = {(byte) 0x80, (byte) 0xA8,(byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x83,(byte) 0x00};
+                        byte AFLCommand[] = {(byte) 0x80, (byte) 0xA8,(byte) 0x00, (byte) 0x00, (byte) 0x02, (byte) 0x83,(byte) 0x00, (byte) 0x00
+                        };
                         response = myTag.transceive(AFLCommand);
                         mess = ParseGeneralInfo.toHex(response);
+                        new AFL(response);
                         Log.d("Test", "AFL Response: " + mess);
                     }else {
                         byte AFLCommand[] = new byte[(CreditCard.getPDOL().length()/2) + 6];
@@ -128,6 +131,7 @@ public class NFCCreditCardToolActivity extends Activity {
                         AFLCommand[(CreditCard.getPDOL().length()/2) + 5] = (byte) 0x00;
                         response = myTag.transceive(AFLCommand);
                         mess = ParseGeneralInfo.toHex(response);
+                        new AFL(response);
                         Log.d("Test", "AFL Response: " + mess);
                     }
 
