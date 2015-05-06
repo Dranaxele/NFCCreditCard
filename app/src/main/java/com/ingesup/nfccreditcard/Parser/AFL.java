@@ -19,24 +19,20 @@ public class AFL {
                 Log.d("Test", "Parse: AIP");
                 Log.d("Test", "Taille: " + ParseGeneralInfo.byteValue(bytes[i+1]));
                 Log.d("Test", "Message: " + ParseGeneralInfo.toHex(bytes).substring((i*2)+4, ((ParseGeneralInfo.byteValue(bytes[i+1]))*2)+(i*2)+4));
-            }else if(bytes[i] == (byte) 0x9F){
-                Log.d("Test", "Parse: AIP");
+            }else if(bytes[i] == (byte) 0x9F && bytes[i+1] == (byte) 0x36){
+                Log.d("Test", "Parse: ATC");
                 Log.d("Test", "Taille: " + ParseGeneralInfo.byteValue(bytes[i+1]));
                 Log.d("Test", "Message: " + ParseGeneralInfo.toHex(bytes).substring((i*2)+4, ((ParseGeneralInfo.byteValue(bytes[i+1]))*2)+(i*2)+4));
-            }else if(bytes[i] == (byte) 0x36){
-                Log.d("Test", "Parse: AIP");
+            }else if(bytes[i] == (byte) 0x9F && bytes[i] == (byte) 0x27){
+                Log.d("Test", "Parse: CID");
                 Log.d("Test", "Taille: " + ParseGeneralInfo.byteValue(bytes[i+1]));
                 Log.d("Test", "Message: " + ParseGeneralInfo.toHex(bytes).substring((i*2)+4, ((ParseGeneralInfo.byteValue(bytes[i+1]))*2)+(i*2)+4));
-            }else if(bytes[i] == (byte) 0x27){
-                Log.d("Test", "Parse: AIP");
+            }else if(bytes[i] == (byte) 0x9F && bytes[i] == (byte) 0x10){
+                Log.d("Test", "Parse: IAD");
                 Log.d("Test", "Taille: " + ParseGeneralInfo.byteValue(bytes[i+1]));
                 Log.d("Test", "Message: " + ParseGeneralInfo.toHex(bytes).substring((i*2)+4, ((ParseGeneralInfo.byteValue(bytes[i+1]))*2)+(i*2)+4));
-            }else if(bytes[i] == (byte) 0x10){
-                Log.d("Test", "Parse: AIP");
-                Log.d("Test", "Taille: " + ParseGeneralInfo.byteValue(bytes[i+1]));
-                Log.d("Test", "Message: " + ParseGeneralInfo.toHex(bytes).substring((i*2)+4, ((ParseGeneralInfo.byteValue(bytes[i+1]))*2)+(i*2)+4));
-            }else if(bytes[i] == (byte) 0x26){
-                Log.d("Test", "Parse: AIP");
+            }else if(bytes[i] == (byte) 0x9F && bytes[i] == (byte) 0x26){
+                Log.d("Test", "Parse: AC");
                 Log.d("Test", "Taille: " + ParseGeneralInfo.byteValue(bytes[i+1]));
                 Log.d("Test", "Message: " + ParseGeneralInfo.toHex(bytes).substring((i*2)+4, ((ParseGeneralInfo.byteValue(bytes[i+1]))*2)+(i*2)+4));
             }
