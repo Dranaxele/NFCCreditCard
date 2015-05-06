@@ -123,10 +123,9 @@ public class NFCCreditCardToolActivity extends Activity {
                         AFLCommand[1] = (byte) 0xA8;
                         AFLCommand[2] = (byte) 0x00;
                         AFLCommand[3] = (byte) 0x00;
-                        AFLCommand[5] = (byte) (CreditCard.getPDOL().length()/2);
-                        AFLCommand[4] = (byte) 0x83;
+                        AFLCommand[4] = (byte) CreditCard.getPDOL().length();
                         for (int p = 0; p < CreditCard.getPDOL().length(); p += 2) {
-                            AFLCommand[(p/2)+6] = ParseGeneralInfo.hexStringToByteArray(CreditCard.getPDOL().substring(p, p + 2))[0];
+                            AFLCommand[(p/2)+5] = ParseGeneralInfo.hexStringToByteArray(CreditCard.getPDOL().substring(p, p + 2))[0];
                         }
                         AFLCommand[(CreditCard.getPDOL().length()/2) + 5] = (byte) 0x00;
                         response = myTag.transceive(AFLCommand);
