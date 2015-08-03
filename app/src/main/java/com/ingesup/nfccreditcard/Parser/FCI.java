@@ -44,7 +44,7 @@ public class FCI {
                 Log.d("Test", "Parse: PDOL");
                 Log.d("Test", "Taille: " + ParseGeneralInfo.byteValue(bytes[i+2]));
                 Log.d("Test", "Message: ");
-                NFCCreditCardToolActivity.CreditCard.setPDOL(ParseGeneralInfo.toHex(bytes).substring((i*2)+4, (i*2)+4+ParseGeneralInfo.byteValue(bytes[i+2])));
+                NFCCreditCardToolActivity.CreditCard.setPDOL(ParseGeneralInfo.toHex(bytes).substring((i*2)+6, (i*2)+6+(ParseGeneralInfo.byteValue(bytes[i+2])*2)));
                 Log.d("Carte", "PDOL: " + NFCCreditCardToolActivity.CreditCard.getPDOL());
             }else if(bytes[i] == (byte) 0x5F && bytes[i+1] == (byte) 0x2D){
                 Log.d("Test", "Parse: Language Preference");
